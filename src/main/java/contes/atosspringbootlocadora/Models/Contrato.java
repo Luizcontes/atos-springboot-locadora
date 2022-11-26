@@ -1,28 +1,70 @@
-package contes.atosspringbootlocadora.Repository;
+package contes.atosspringbootlocadora.Models;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-// @Entity
-// @Table(name = "contrato")
-public class Contrato {
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int nContrato;
-    // @ManyToOne
+@Entity
+@Table(name = "contrato")
+public class Contrato implements Serializable{
+
+    @Serial
+    private static final long serialVersionUID = 3L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long nContrato;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
     private Cliente cliente;
-    // @ManyToOne
+    
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "automovel_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JsonIgnore
     private Automovel automovel;
+
     private double preco;
+
     private LocalDate data;
+
     private int periodo;
+
+    public Contrato() {
+
+    }
+
+    public Contrato(Cliente cliente, Automovel automovel, double preco, LocalDate data, int periodo) {
+        this.cliente = cliente;
+        this.automovel = automovel;
+        this.preco = preco;
+        this.data = data;
+        this.periodo = periodo;
+    }
+
+    public Long getNContrato() {
+        return nContrato;
+    }
+
+    public void setNContrato(Long nContrato) {
+        this.nContrato = nContrato;
+    }
 
     public Cliente getCliente() {
         return cliente;
@@ -75,4 +117,5 @@ public class Contrato {
 
         return contrato;
     }
+
 }
